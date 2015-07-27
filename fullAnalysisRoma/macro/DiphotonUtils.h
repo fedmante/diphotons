@@ -10,6 +10,7 @@
 #include "TAxis.h"
 #include "TLegend.h"
 #include "TFrame.h"
+#include "TStyle.h"
 #include <iostream>
 
 
@@ -35,8 +36,8 @@ class DiphotonPlot {
 
   enum samp { iRS, iQCD, iGJets, iGG, nSamples };
 
-  float xPos[nSamples+1] = {0.70,0.70,0.70,0.70};
-  float yOff[nSamples+1] = {0,1,2,3};
+  const float xPos[nSamples+1] = {0.70,0.70,0.70,0.70};
+  const float yOff[nSamples+1] = {0,1,2,3};
 
   const Float_t _tsize   = 0.03;
   const Float_t _xoffset = 0.20;
@@ -79,6 +80,8 @@ class DiphotonPlot {
   // void setBreakdown(const bool &b = true);
   void setBreakdown(const bool &b);
   void addLabel(const std::string &s);
+
+  void setStyle();
 
 };
 
