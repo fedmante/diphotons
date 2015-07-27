@@ -45,10 +45,10 @@ void makeMCPlots(float lumi, int signalFactor=1)
 
   // chiara
   TString files[NSPECIES];
-  files[0]="data/newSelection/mergedFinal/RSGravToGG_kMpl-01_M-1500.root";
-  files[1]="data/newSelection/mergedFinal/QCD.root";
-  files[2]="data/newSelection/mergedFinal/GJets.root";
-  files[3]="data/newSelection/mergedFinal/GGJets.root";
+  files[0]="ntuples/RSGravToGG_kMpl-01_M-1500.root";
+  files[1]="ntuples/QCD.root";
+  files[2]="ntuples/GJets.root";
+  files[3]="ntuples/GGJets.root";
 
   TString plotsDir="./diphotPlots/";
 
@@ -188,7 +188,7 @@ void makeMCPlots(float lumi, int signalFactor=1)
 	T1[i]->Project(histoName,variables[z],cut[j]+"weight*"+intLumi);
 	std::cout << "Done " << histoName << std::endl;
       }
-          
+    
       DiphotonPlot myPlot;
       myPlot.setLumi(lumi);
       myPlot.addLabel("");
@@ -221,4 +221,6 @@ void makeMCPlots(float lumi, int signalFactor=1)
   
   fOut->Write();
   fOut->Close();
+
+      
 }

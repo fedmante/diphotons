@@ -1,4 +1,4 @@
-// to compile: c++ -o makeMCPlots `root-config --cflags --glibs` makeMCPLots.cpp DiphotonUtils.cc
+// to compile: c++ -o makeMCPlots `root-config --cflags --glibs` makeMCPlots.cpp DiphotonUtils.cc
 // to run: ./makeMCPlots
 
 
@@ -17,7 +17,7 @@
 #include "DiphotonUtils.h"
 
 #define NSPECIES 4
-#define NVARIABLES 1
+#define NVARIABLES 8
 #define NCUTS 5
 
 int main()
@@ -27,7 +27,6 @@ int main()
   int signalFactor = 1;
 
   gROOT->SetStyle("Plain");
-  //gROOT->ProcessLine(".x ./DiphotonStyle.C");
   gStyle->SetPalette(1);
   gStyle->SetOptStat(0); 
   gStyle->SetOptFit(111110); 
@@ -36,6 +35,9 @@ int main()
   gStyle->SetMarkerStyle(20);
   gStyle->SetMarkerSize(1.0);
   gStyle->SetMarkerColor(1);
+
+  DiphotonPlot *myPlot = new DiphotonPlot;
+  myPlot->setStyle();
 
   TString suffix="";
 
@@ -68,7 +70,6 @@ int main()
   // chiara
   TString variables[NVARIABLES];
   variables[0]="mgg";
-  /*
   variables[1]="ptgg";
   variables[2]="pt1";
   variables[3]="pt2";
@@ -76,12 +77,10 @@ int main()
   variables[5]="eta2";
   variables[6]="r91";
   variables[7]="r92";
-  */
 
   // chiara
   TString units[NVARIABLES];
   units[0]="GeV/c^{2}";
-  /*
   units[1]="GeV/c";
   units[2]="GeV/c";
   units[3]="GeV/c";
@@ -89,12 +88,10 @@ int main()
   units[5]="";
   units[6]="";
   units[7]="";
-  */
 
   // chiara
   int nbins[NVARIABLES];
   nbins[0]=60;
-  /*
   nbins[1]=50;
   nbins[2]=50;
   nbins[3]=50;
@@ -102,14 +99,12 @@ int main()
   nbins[5]=50;
   nbins[6]=20;
   nbins[7]=20;
-  */
 
   // chiara
   float range[NVARIABLES][2]; // N variables, min, max
   // mgg
   range[0][0]=0.;
   range[0][1]=6000.;
-  /*
   // ptgg
   range[1][0]=0.;
   range[1][1]=3000.;
@@ -131,12 +126,10 @@ int main()
   // r91
   range[7][0]=0.8;
   range[7][1]=1.;
-  */
 
   // chiara
   TString xaxisLabel[NVARIABLES];
   xaxisLabel[0]="m(#gamma#gamma)";
-  /*
   xaxisLabel[1]="p_{T}(#gamma #gamma)";
   xaxisLabel[2]="p_{T}(#gamma1)";
   xaxisLabel[3]="p_{T}(#gamma2)";
@@ -144,7 +137,6 @@ int main()
   xaxisLabel[5]="#eta(#gamma2)";
   xaxisLabel[6]="R9(#gamma1)";
   xaxisLabel[7]="R9(#gamma2)";
-  */
 
   TString binSize[NVARIABLES];
 
@@ -197,7 +189,8 @@ int main()
 	std::cout << "Done " << histoName << std::endl;
       }
                
-      DiphotonPlot *myPlot = new DiphotonPlot;
+      //DiphotonPlot *myPlot = new DiphotonPlot;
+ 
       myPlot->setLumi(lumi);
       myPlot->addLabel("");
       myPlot->setLabel((xaxisLabel[z]).Data());
