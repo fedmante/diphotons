@@ -21,7 +21,10 @@ process.source = cms.Source("PoolSource",
         #"/store/group/phys_higgs/cmshgg/musella/flashgg/ExoPhys14ANv1/diphotonsPhys14AnV1/GGJets_M-500To1000_Pt-50_13TeV-sherpa/ExoPhys14ANv1-diphotonsPhys14AnV1-v0-Phys14DR-PU20bx25_PHYS14_25_V1-v1/150330_141301/0000/diphotonsMicroAOD_1.root"
 
         # Phys14, RS 3TeV, AnV1 
-        "/store/group/phys_higgs/cmshgg/musella/flashgg/ExoPhys14ANv1/diphotonsPhys14AnV1/RSGravToGG_kMpl-01_M-3000_Tune4C_13TeV-pythia8/ExoPhys14ANv1-diphotonsPhys14AnV1-v0-Phys14DR-PU30bx50_PHYS14_25_V1-v1/150330_141554/0000/diphotonsMicroAOD_2.root"
+        #"/store/group/phys_higgs/cmshgg/musella/flashgg/ExoPhys14ANv1/diphotonsPhys14AnV1/RSGravToGG_kMpl-01_M-3000_Tune4C_13TeV-pythia8/ExoPhys14ANv1-diphotonsPhys14AnV1-v0-Phys14DR-PU30bx50_PHYS14_25_V1-v1/150330_141554/0000/diphotonsMicroAOD_2.root"
+
+        # Spring15
+        'root://xrootd.unl.edu//store/group/phys_higgs/cmshgg/musella/flashgg/EXOSpring15_v1/Spring15BetaV2/RSGravToGG_kMpl-01_M-1500_TuneCUEP8M1_13TeV-pythia8/EXOSpring15_v1-Spring15BetaV2-v0-RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/150716_211534/0000/diphotonsMicroAOD_1.root'
         )
                             )
 
