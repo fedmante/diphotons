@@ -24,7 +24,9 @@ process.source = cms.Source("PoolSource",
                             fileNames=cms.untracked.vstring(
 
         # Spring15, DY
-        "file:diphotonsMicroAOD_1.root"
+        #"file:diphotonsMicroAOD_1.root"
+
+        "/store/group/phys_higgs/cmshgg/musella/flashgg/EXOSpring15_v1/Spring15BetaV2/RSGravToGG_kMpl-001_M-500_TuneCUEP8M1_13TeV-pythia8/EXOSpring15_v1-Spring15BetaV2-v0-RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/150717_101901/0000/diphotonsMicroAOD_1.root"
         )
                             )
 
