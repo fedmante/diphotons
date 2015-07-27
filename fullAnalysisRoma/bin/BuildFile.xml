@@ -1,0 +1,2 @@
+<use name="root"/>
+<bin   file="runBacon.cpp" name="runBacon"> </bin>
