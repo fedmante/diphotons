@@ -467,7 +467,7 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
                 // tightEle
                 // matchHLT
                 electron_pt.push_back(elePt);
-                electron_eta.push_back(scEta);
+                electron_eta.push_back(Electron->superCluster()->eta());
                 electron_phi.push_back(Electron->superCluster()->phi());
                 isTagTightEle.push_back(tightEle);
                 isTagMediumEle.push_back(mediumEle);
