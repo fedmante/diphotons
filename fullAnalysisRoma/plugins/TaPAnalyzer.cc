@@ -577,7 +577,7 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
     //---fill output tree and reset
     outTree_->Fill();
-    cout << "HOLA" << endl;
+
     //---tag
     electron_pt.clear();
     electron_eta.clear();

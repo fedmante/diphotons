@@ -22,17 +22,20 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32( -1 ) )
 
 process.source = cms.Source("PoolSource",
                             fileNames=cms.untracked.vstring(
-
-                                # Spring15, DY
-                                "/store/group/phys_higgs/cmshgg/musella/flashgg/EXOSpring15_v1/Spring15BetaV2/RSGravToGG_kMpl-001_M-500_TuneCUEP8M1_13TeV-pythia8/EXOSpring15_v1-Spring15BetaV2-v0-RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/150717_101901/0000/diphotonsMicroAOD_1.root")
-)
+        
+        # Spring15, DY
+        #"/store/group/phys_higgs/cmshgg/musella/flashgg/EXOSpring15_v1/Spring15BetaV2/RSGravToGG_kMpl-001_M-500_TuneCUEP8M1_13TeV-pythia8/EXOSpring15_v1-Spring15BetaV2-v0-RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/150717_101901/0000/diphotonsMicroAOD_1.root")
+        
+        # MC Drell-Yan 50ns
+        "/store/group/phys_higgs/cmshgg/musella/flashgg/EXOSpring15_v1/Spring15BetaV2/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/EXOSpring15_v1-Spring15BetaV2-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150717_100654/0000/diphotonsMicroAOD_1.root")
+                            )
 
 process.load("flashgg/MicroAOD/flashggPhotons_cfi")
 process.load("flashgg/MicroAOD/flashggElectrons_cfi")
 process.load("flashgg/MicroAOD/flashggDiPhotons_cfi")
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string("diPhotons.root"))
+                                   fileName = cms.string("TaP_output.root"))
 
 process.tnpAna = cms.EDAnalyzer('TaPAnalyzer',
                                 VertexTag = cms.untracked.InputTag('offlineSlimmedPrimaryVertices'),
