@@ -200,20 +200,20 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
     // --------------------------------------------------
     // Event info
-    int run   = iEvent.eventAuxiliary().run();
-    int event = iEvent.eventAuxiliary().event();
-    int lumi  = iEvent.eventAuxiliary().luminosityBlock(); 
+    run   = iEvent.eventAuxiliary().run();
+    event = iEvent.eventAuxiliary().event();
+    lumi  = iEvent.eventAuxiliary().luminosityBlock(); 
 
     // # Vertices
-    int nvtx = primaryVertices->size(); 
+    nvtx = primaryVertices->size(); 
 
     // Energy density
-    float rho    = *(objs_rho.product());
+    rho    = *(objs_rho.product());
     // float rhoEle = *(objs_rhoEle.product());    // EA correction for electrons - chiara: non nelle ntuple
 
     // PU weight (for MC only and if requested)
-    float pu_weight = 1.;
-    float pu_n      = -1.;
+    pu_weight = 1.;
+    pu_n      = -1.;
     if (sampleID>0) {     // MC
         pu_n = 0.;
         for( unsigned int PVI = 0; PVI < PileupInfos->size(); ++PVI ) {
@@ -228,7 +228,7 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     cout << pu_weight << endl;
   
     // x-sec * kFact for MC only 
-    float totXsec = 1.;
+    totXsec = 1.;
     if (sampleID>0) totXsec = xsec_ * kfac_;
 
     // other weights for the dataset
