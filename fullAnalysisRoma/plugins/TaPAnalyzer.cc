@@ -200,12 +200,12 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
     // --------------------------------------------------
     // Event info
-    // int run   = iEvent.eventAuxiliary().run();
-    // int event = iEvent.eventAuxiliary().event();
-    // int lumi  = iEvent.eventAuxiliary().luminosityBlock(); 
+    int run   = iEvent.eventAuxiliary().run();
+    int event = iEvent.eventAuxiliary().event();
+    int lumi  = iEvent.eventAuxiliary().luminosityBlock(); 
 
     // # Vertices
-    // int nvtx = primaryVertices->size(); 
+    int nvtx = primaryVertices->size(); 
 
     // Energy density
     float rho    = *(objs_rho.product());
