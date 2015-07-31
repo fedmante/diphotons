@@ -118,10 +118,8 @@ private:
   vector <float> electron_pt={};
   vector <float> electron_eta={};
   vector <float> electron_phi={};
-  vector <bool>   isTagTightEle={};
-  vector <bool>   isTagMediumEle={};
-  vector <int>   isTrig17Mass50MatchedEle={};
-  vector <int>   isTrig20Mass50MatchedEle={};
+  vector <bool>  isTagTightEle={};
+  vector <bool>  isTagMediumEle={};
   vector <bool>  electron_matchHLT={};
    
   int  accGammaSize;                
@@ -136,9 +134,9 @@ private:
   vector <float> gamma_phoiso={};
   vector <float> gamma_neuiso={};
   vector <float> gamma_eleveto={};
-  vector <int> gamma_presel={};
-  vector <int> gamma_fullsel={};
-  vector <bool> gamma_matchHLT={};  
+  vector <int>   gamma_presel={};
+  vector <int>   gamma_fullsel={};
+  vector <bool>  gamma_matchHLT={};  
 
   vector <Double_t> invMass={};
   vector <int> eleIndex={};
@@ -408,7 +406,7 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 	    float elePhi = Electron->phi();
 	
 	    // match with selected HLT objects
-	    bool matchHLT = true;
+	    bool matchHLT = true; //? false
 	    TLorentzVector thisRecoEle(0,0,0,0);
 	    thisRecoEle.SetPtEtaPhiM(elePt,eleEta,elePhi,0);
 	    for (int hltTagC=0; hltTagC<(int)hltTagPt.size(); hltTagC++)
@@ -558,7 +556,7 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 	    gamma_phoiso.push_back(g1->egPhotonIso());
 	    gamma_neuiso.push_back(g1->egNeutralHadronIso());
 	    gamma_eleveto.push_back(g1->passElectronVeto());
-	    gamma_presel.push_back(passFullSelel);
+	    gamma_presel.push_back(passPresel);
 	    gamma_fullsel.push_back(passFullSelel);
 	    gamma_matchHLT.push_back(matchHLT);
 	    // Variables for the tree - for each photon in the acceptance - todo
@@ -576,8 +574,6 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 	cout << atLeastOneProbe << " " << atLeastOneTag << endl;
       } // vertex
     } // HLT
-  //?? || isTrig17Mass50MatchedEle.push_back();
-  // ??|| isTrig20Mass50MatchedEle.push_back();
     
   // --- invariant mass
   for(int iGamma = 0; iGamma < accGammaSize; iGamma++) {
@@ -594,7 +590,10 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
       
     
   //---fill output tree and reset
-  outTree_->Fill();
+  if (atLeastOneProbe && atLeastOneTag) {
+    outTree_->Fill();
+    cout << "Tree filled" << endl;
+  }
 
   //---tag
   electron_pt.clear();
@@ -602,8 +601,6 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   electron_phi.clear();
   isTagTightEle.clear();
   isTagMediumEle.clear();
-  isTrig17Mass50MatchedEle.clear();
-  isTrig20Mass50MatchedEle.clear();
   electron_matchHLT.clear();
   //---probe
   gamma_pt.clear();
@@ -668,9 +665,8 @@ void TaPAnalyzer::bookOutputTree()
   outTree_->Branch("electron_phi", "std::vector<float>", &electron_phi);
   outTree_->Branch("isTagTightEle", "std::vector<bool>", &isTagTightEle );
   outTree_->Branch("isTagMediumEle", "std::vector<bool>", &isTagMediumEle );
-  outTree_->Branch("isTrig17Mass50MatchedEle", "std::vector<int>", &isTrig17Mass50MatchedEle);
-  outTree_->Branch("isTrig20Mass50MatchedEle", "std::vector<int>", &isTrig20Mass50MatchedEle);
-
+  outTree_->Branch("electron_matchHLT", "std::vector<bool>", &electron_matchHLT );
+ 
   outTree_->Branch("accGammaSize",  &accGammaSize,  "accGammaSize/I");   
   outTree_->Branch("gamma_pt", "std::vector<float>", &gamma_pt);
   outTree_->Branch("gamma_eta", "std::vector<float>", &gamma_eta);
@@ -685,6 +681,7 @@ void TaPAnalyzer::bookOutputTree()
   outTree_->Branch("gamma_eleveto", "std::vector<float>", &gamma_eleveto);
   outTree_->Branch("gamma_presel", "std::vector<int>", &gamma_presel);
   outTree_->Branch("gamma_fullsel", "std::vector<int>", &gamma_fullsel);
+  outTree_->Branch("gamma_matchHLT", "std::vector<bool>", &gamma_matchHLT);
 
   outTree_->Branch("invMass","std::vector<Double_t>", &invMass);
   outTree_->Branch("eleIndex","std::vector<int>", &eleIndex);
