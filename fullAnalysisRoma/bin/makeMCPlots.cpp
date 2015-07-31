@@ -1,4 +1,4 @@
-// to compile: c++ -o makeMCPlots `root-config --cflags --glibs` makeMCPLots.cpp DiphotonUtils.cc
+// to compile: c++ -o makeMCPlots `root-config --cflags --glibs` makeMCPlots.cpp ../src/DiphotonUtils.cc
 // to run: ./makeMCPlots
 
 
@@ -14,7 +14,7 @@
 #include "TPaveText.h"
 #include <iostream>
 
-#include "DiphotonUtils.h"
+#include "../interface/DiphotonUtils.h"
 
 #define NSPECIES 4
 #define NVARIABLES 8
@@ -55,12 +55,12 @@ int main()
 
   // chiara
   TString files[NSPECIES];
-  files[0]="ntuples/RSGravToGG_kMpl-01_M-1500.root";
-  files[1]="ntuples/QCD.root";
-  files[2]="ntuples/GJets.root";
-  files[3]="ntuples/GGJets.root";
+  files[0]="../ntuples/RSGravToGG_kMpl-01_M-1500.root";
+  files[1]="../ntuples/QCD.root";
+  files[2]="../ntuples/GJets.root";
+  files[3]="../ntuples/GGJets.root";
 
-  TString plotsDir="./diphotPlots/";
+  TString plotsDir="../diphoPlots/";
 
   TFile* fOut=new TFile("diPhotHistos_"+suffix+".root","RECREATE");
   

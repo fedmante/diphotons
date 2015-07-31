@@ -1,4 +1,5 @@
-#include "diphotons/fullAnalysisRoma/interface/DiphotonUtils.h"
+//#include "diphotons/fullAnalysisRoma/interface/DiphotonUtils.h"
+#include "../interface/DiphotonUtils.h"
   
 DiphotonPlot::DiphotonPlot() //ctor
 {
@@ -94,6 +95,8 @@ void DiphotonPlot::setRSHist   (TH1F * h)                 { setMCHist(iRS   ,h);
 void DiphotonPlot::setGGHist   (TH1F * h)                 { setMCHist(iGG   ,h); } 
 void DiphotonPlot::setGJetsHist(TH1F * h)                 { setMCHist(iGJets,h); } 
 void DiphotonPlot::setQCDHist  (TH1F * h)                 { setMCHist(iQCD,h);   } 
+
+//void DiphotonPlot::setTaPHist  (TH1F * h)                 { _TaPhisto      = h;  }
    
 void DiphotonPlot::setNoStack() { _nostack = true; }
 
@@ -120,8 +123,7 @@ void DiphotonPlot::DrawAndRebinTo(const int &rebinTo) {
     
 }
 
-//void DiphotonPlot::Draw(const int &rebin) {
-  void DiphotonPlot::Draw(const int rebin) {
+void DiphotonPlot::Draw(const int rebin) {
     
   Color_t _sampleColor[nSamples];
   _sampleColor[iRS  ]  = kBlue+1;
@@ -242,6 +244,22 @@ void DiphotonPlot::addLabel(const std::string &s) {
   _extraLabel->SetTextAlign(32);
   _extraLabel->SetTextFont(42);
   _extraLabel->SetTextSize(_tsize);
+}
+
+void DiphotonPlot::SimpleDraw(TH1F *h){
+
+  Color_t fillColor = kGreen-3;
+  Color_t lineColor = kBlack;
+ 
+  h->SetFillColor(fillColor);
+  h->SetLineColor(lineColor);
+  h->SetFillStyle(1001);
+
+  //Float_t theMax = h->GetMaximum();
+  //Float_t theMin = h->GetMinimum();
+
+  h->Draw();
+
 }
   
 void DiphotonPlot::setStyle() {

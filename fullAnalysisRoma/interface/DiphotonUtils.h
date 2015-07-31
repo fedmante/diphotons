@@ -20,6 +20,7 @@ class DiphotonPlot {
 
   std::vector<TH1F*> _hist;
   TH1F* _data;
+  TH1F* _TaPhisto;
   
   //MWL
   float    _lumi;
@@ -62,7 +63,7 @@ class DiphotonPlot {
   void setGGHist   (TH1F *h);                
   void setGJetsHist(TH1F *h);                
   void setQCDHist  (TH1F *h);                 
-  
+ 
   void setNoStack();
 
   TH1F* getDataHist();
@@ -73,6 +74,7 @@ class DiphotonPlot {
 
   //void Draw(const int &rebin=1);
   void Draw(const int rebin);
+  void SimpleDraw(TH1F *h);
 
   void setLumi(const float &l);
   void setLabel(const TString &s);
