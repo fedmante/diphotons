@@ -300,6 +300,8 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
       fired[2] = true;
   }
 
+  bool atLeastOneTag = false;
+  bool atLeastOneProbe = false;
   if (fired[0] || fired[1]) {
     // if (fired[0] || fired[1] || fired[2]) {  // ancora da verificare il terzo
 
@@ -372,7 +374,7 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
 	// ----------------------------------------------------  
 	// 3) at least one tag candidate
-	bool atLeastOneTag = false;
+          atLeastOneTag = false;
       
 	// Loop over electron candidates
 	const std::vector<edm::Ptr<reco::Vertex> > &vertexPointers = primaryVertices->ptrs();
@@ -479,7 +481,7 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
 	// ----------------------------------------------------
 	// 4) at least one probe found
-	bool atLeastOneProbe = false;
+	atLeastOneProbe = false;
       
 	std::vector<int> acceptGamma;
 	for(int phloop = 0; phloop < (int)objs_pho->size(); phloop++ ) {  
