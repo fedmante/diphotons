@@ -1,0 +1,10 @@
+<use name="root"/>
+<use name="rootgraphics"/>
+<use name="FWCore/FWLite"/>
+<use name="FWCore/ParameterSet"/>
+<use name="FWCore/PythonParameterSet"/>
+<use name="flashgg/DataFormats"/>
+<export>
+  <lib   name="1"/>
+</export>
+
