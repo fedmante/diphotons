@@ -1,5 +1,0 @@
-{ 
-    "variables"  : ["egChargedHadronIso","rho","pt"],
-    "methods"    : [ "LD" ],
-    "label"      : "chIso"
-}

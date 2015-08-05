@@ -1,5 +1,0 @@
-{ 
-    "variables"  : ["egPhotonIso","rho","pt"],
-    "methods"    : [ "LD" ],
-    "label"      : "phoIso"
-}
