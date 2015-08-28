@@ -12,7 +12,7 @@
 #include "../interface/DiphotonUtils.h"
 
 #define NVARIABLES 10
-#define NCUTS 1
+#define NCUTS 4
 
 using namespace std;
 
@@ -30,26 +30,30 @@ int main(int argc, char* argv[])
 
     DiphotonPlot *myPlot = new DiphotonPlot();
     myPlot->setStyle();
-
+    gStyle->SetOptStat("");
     TString plotsDir="TaPplots/";
     system("mkdir -p TaPplots");
 
     TFile* fOut=new TFile("TaPplots/TaP_histos.root","RECREATE");
   
     char icut[NCUTS][100];
+    sprintf(icut[0],"EB_matched");
+    sprintf(icut[1],"EE_matched");
+    sprintf(icut[2],"EB_unmatched");
+    sprintf(icut[3],"EE_unmatched");
     TH1F* histos[NCUTS][NVARIABLES][2];    
   
     TString variables[NVARIABLES];
     variables[0]="invMass";
-    variables[1]="electron_pt";
-    variables[2]="electron_eta";
-    variables[3]="electron_phi";
-    variables[4]="gamma_pt";
-    variables[5]="gamma_eta";
-    variables[6]="gamma_phi";
-    variables[7]="gamma_r9";
-    variables[8]="gamma_sieie";
-    variables[9]="gamma_scRawEne";
+    variables[1]="electron_pt[eleIndex]";
+    variables[2]="electron_eta[eleIndex]";
+    variables[3]="electron_phi[eleIndex]";
+    variables[4]="gamma_pt[gammaIndex]";
+    variables[5]="gamma_eta[gammaIndex]";
+    variables[6]="gamma_phi[gammaIndex]";
+    variables[7]="gamma_r9[gammaIndex]";
+    variables[8]="gamma_sieie[gammaIndex]";
+    variables[9]="gamma_scRawEne[gammaIndex]";
 
     TString units[NVARIABLES];
     units[0]="GeV/c^{2}";
@@ -125,7 +129,6 @@ int main(int argc, char* argv[])
     {
         for (int iVar=0;iVar<NVARIABLES;++iVar)
         {      
-            sprintf(icut[iCut],"icut%d",iCut);
             histos[iCut][iVar][0] = new TH1F(variables[iVar]+"_"+TString(icut[iCut])+"_mc", variables[iVar]+"_"+TString(icut[iCut]),
                                             nbins[iVar],range[iVar][0],range[iVar][1]);
             histos[iCut][iVar][0]->SetFillColor(kRed+1);
@@ -147,10 +150,20 @@ int main(int argc, char* argv[])
 
     //---cuts
     TString cut[NCUTS];
-    //cut[0]="(invMass>0)";
-    cut[0]="(invMass>60 && invMass<120)";
+    cut[0] = "(invMass>60 && invMass<120 &&"
+        "gamma_matchHLT[gammaIndex]==1 && electron_matchHLT[eleIndex]==1 &&"
+        "TMath::Abs(gamma_eta[gammaIndex])<1.5 && TMath::Abs(electron_eta[eleIndex])<1.5)";    
+    cut[1] = "(invMass>60 && invMass<120 &&"
+        "gamma_matchHLT[gammaIndex]==1 && electron_matchHLT[eleIndex]==1 &&"
+        "(TMath::Abs(gamma_eta[gammaIndex])>1.5 || TMath::Abs(electron_eta[eleIndex])>1.5))";
+    cut[2] = "(invMass>60 && invMass<120 &&"
+        "(gamma_matchHLT[gammaIndex]==0 || electron_matchHLT[eleIndex]==0) &&"
+        "TMath::Abs(gamma_eta[gammaIndex])<1.5 && TMath::Abs(electron_eta[eleIndex])<1.5)";    
+    cut[3] = "(invMass>60 && invMass<120 &&"
+        "(gamma_matchHLT[gammaIndex]==0 || electron_matchHLT[eleIndex]==0) &&"
+        "(TMath::Abs(gamma_eta[gammaIndex])>1.5 || TMath::Abs(electron_eta[eleIndex])>1.5))";
 
-    TString inputFileNameMC = "TaP_output_MC.root";
+    TString inputFileNameMC = "TaP_output_DY.root";
     TString inputFileNameData = "TaP_output_data.root";
     TFile* mcFile = TFile::Open(inputFileNameMC);
     TFile* dataFile = TFile::Open(inputFileNameData);
@@ -164,6 +177,7 @@ int main(int argc, char* argv[])
             fOut->cd();
             TString mcHistoName = variables[iVar]+"_"+TString(icut[iCut])+"_mc";
             TString dataHistoName = variables[iVar]+"_"+TString(icut[iCut])+"_data";
+
             std::cout << "Producing " << variables[iVar] << std::endl;
             if(!mcTree || !dataTree)
                 std::cout << " Tree not found" << std::endl;
@@ -171,15 +185,17 @@ int main(int argc, char* argv[])
             dataTree->Project(dataHistoName, variables[iVar], "perEveW*"+cut[iCut]);
 
             //---Draw and print
-            TCanvas* c1 = new TCanvas(Form("tap_%d_%d_lin", iVar, iCut),
-                                      Form("tap_%d_%d_lin", iVar, iCut));
+            TCanvas* c1 = new TCanvas(Form("tap_%d_%d", iVar, iCut),
+                                      Form("tap_%d_%d", iVar, iCut));
       
             c1->SetLogy(0);
+            histos[iCut][iVar][0]->SetAxisRange(0, max(histos[iCut][iVar][0]->GetMaximum(),
+                                                       histos[iCut][iVar][1]->GetMaximum()));
             histos[iCut][iVar][0]->DrawNormalized("");
             histos[iCut][iVar][1]->DrawNormalized("Psame");
             c1->GetFrame()->DrawClone();
-            c1->SaveAs(plotsDir+variables[iVar]+"_MC_DY_50ns_"+TString(icut[iCut])+".pdf");
-            c1->SaveAs(plotsDir+variables[iVar]+"_MC_DY_50ns_"+TString(icut[iCut])+".png");
+            c1->SaveAs(plotsDir+variables[iVar]+"_"+TString(icut[iCut])+".pdf");
+            c1->SaveAs(plotsDir+variables[iVar]+"_"+TString(icut[iCut])+".png");
 
             // TCanvas* c2 = new TCanvas(Form("tap_%d_%d_log", iVar, iCut),
             //                           Form("tap_%d_%d_log", iVar, iCut));
@@ -197,5 +213,4 @@ int main(int argc, char* argv[])
     }
   
     fOut->Close();
-
 }

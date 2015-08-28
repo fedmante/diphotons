@@ -61,7 +61,7 @@ private:
     // photons
     bool isGammaPresel( float sceta, float pt, float r9, float chiso);
     bool isGammaSelected( float rho, float pt, float sceta, float r9, float chiso, float nhiso, float phoiso, float hoe, float sieie, bool passElectronVeto);
-    int effectiveAreaGammaRegion(float sceta);
+    int  effectiveAreaGammaRegion(float sceta);
 
     // electrons
     float effectiveAreaEle03(float sceta);
@@ -99,18 +99,19 @@ private:
     bool isFilled;
 
     //---output tree branches variables
+    bool ptRatioFlip_;
     edm::Service<TFileService> fs_;
     TTree* outTree_;
 
-    int    run;
-    int    event;
-    int    lumi;
-    int    nvtx;
-    float  rho;
-    int    sampleID;
-    float  totXsec;
-    float  pu_weight;
-    float  pu_n;
+    int   run;
+    int   event;
+    int   lumi;
+    int   nvtx;
+    float rho;
+    int   sampleID;
+    float totXsec;
+    float pu_weight;
+    float pu_n;
     float sumDataset;
     float perEveW;
 
@@ -138,7 +139,8 @@ private:
     vector <int>   gamma_fullsel={};
     vector <bool>  gamma_matchHLT={};  
 
-    vector <Double_t> invMass={};
+    vector <float> ptRatio={};
+    vector <float> invMass={};
     vector <int> eleIndex={};
     vector <int> gammaIndex={};
 };  
@@ -159,7 +161,8 @@ TaPAnalyzer::TaPAnalyzer(const edm::ParameterSet& iConfig):
     xsec_         = iConfig.getUntrackedParameter<double>("xsec",1.); 
     kfac_         = iConfig.getUntrackedParameter<double>("kfac",1.); 
     sumDataset_   = iConfig.getUntrackedParameter<double>("sumDataset",-999.);
-    genInfo_      = iConfig.getParameter<edm::InputTag>("generatorInfo");   
+    genInfo_      = iConfig.getParameter<edm::InputTag>("generatorInfo");
+    ptRatioFlip_  = false;
 };
 
 TaPAnalyzer::~TaPAnalyzer() { };
@@ -261,8 +264,8 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     // 1) analysis cuts: trigger 
 
     // selected HLT object
-    vector<int >hltTagPt, hltTagEta, hltTagPhi;
-    vector<int >hltProbePt, hltProbeEta, hltProbePhi;
+    vector<float> hltTagPt, hltTagEta, hltTagPhi;
+    vector<float> hltProbePt, hltProbeEta, hltProbePhi;
 
     const edm::TriggerNames &names = iEvent.triggerNames(*triggerBits);
 
@@ -381,22 +384,23 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
             const std::vector<edm::Ptr<flashgg::Electron> > &ElectronPointers = theElectrons->ptrs();
             std::vector<int> acceptEle;
             // electrons in the acceptance
-            for( unsigned int ElectronIndex = 0; ElectronIndex < ElectronPointers.size(); ElectronIndex++ ) {
-	
+            for( unsigned int ElectronIndex = 0; ElectronIndex < ElectronPointers.size(); ElectronIndex++ )
+            {	
                 Ptr<flashgg::Electron> Electron = ElectronPointers[ElectronIndex];
 	
                 // acceptance
                 float scEta = fabs( Electron->superCluster()->eta() );
                 float elePt = Electron->pt();
-                if( (fabs(scEta)>1.442 && fabs(scEta)<1.566) || fabs(scEta)>2.5 ) continue;
-                if( elePt<20 ) continue;
+                if( (fabs(scEta)>1.442 && fabs(scEta)<1.566) || fabs(scEta)>2.5 )
+                    continue;
+                if( elePt<20 )
+                    continue;
 	
                 acceptEle.push_back(ElectronIndex);
             }
       
             // full cut based selection
-            accEleSize = acceptEle.size();
-            for (int iEle=0; iEle<accEleSize; iEle++)
+            for(unsigned int iEle=0; iEle<acceptEle.size(); iEle++)
             {
                 int theOrigIndex = acceptEle.at(iEle);
                 Ptr<flashgg::Electron> Electron = ElectronPointers[theOrigIndex];
@@ -476,7 +480,7 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
                 isTagMediumEle.push_back(mediumEle);
                 electron_matchHLT.push_back(matchHLT);                
             }  // tag
-
+            accEleSize = electron_pt.size();
 
             // ----------------------------------------------------
             // 4) at least one probe found
@@ -490,18 +494,19 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
                 // acceptance
                 float gammaPt    = g1->et();
                 float gammaScEta = (g1->superCluster())->eta();
-                if (gammaPt<20) continue;
-                if (fabs(gammaScEta)>2.5) continue;
-                if (fabs(gammaScEta)>1.4442 && fabs(gammaScEta)<1.566) continue;
+                if (gammaPt<20)
+                    continue;
+                if (fabs(gammaScEta)>2.5)
+                    continue;
+                if (fabs(gammaScEta)>1.4442 && fabs(gammaScEta)<1.566)
+                    continue;
 	
                 acceptGamma.push_back(phloop);
             }
 
             // Photon candidates in the acceptance
-            accGammaSize = acceptGamma.size();
-            for(int iGamma=0; iGamma<accGammaSize; iGamma++)
-            {
-	
+            for(unsigned int iGamma=0; iGamma<acceptGamma.size(); iGamma++)
+            {	
                 int theOrigIndex = acceptGamma.at(iGamma);  
                 Ptr<flashgg::Photon> g1 = objs_pho->ptrAt( theOrigIndex );
 	
@@ -526,16 +531,6 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
                     thisHLTob.SetPtEtaPhiM(thisHLTpt,thisHLTeta,thisHLTphi,0);
                     if(thisRecoGamma.DeltaR(thisHLTob)<0.3)
                         matchHLT = true;
-                }
-
-                // --- invariant mass
-                for(int iEle = 0; iEle < accEleSize; ++iEle)
-                {
-                    TLorentzVector thisEle(0,0,0,0);
-                    thisEle.SetPtEtaPhiM(electron_pt[iEle],electron_eta[iEle],electron_phi[iEle],0);
-                    invMass.push_back((thisRecoGamma+thisEle).M());
-                    eleIndex.push_back(iEle); 
-                    gammaIndex.push_back(iGamma);
                 }
 
                 // preselection and full sel
@@ -583,9 +578,41 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
             } // probe
         } // vertex
     } // HLT    
+    accGammaSize = gamma_pt.size();
+
+    //---invariant mass and pt ratio
+    for(int iGam=0; iGam<accGammaSize; ++iGam)
+    {
+        for(int iEle=0; iEle<accEleSize; ++iEle)
+        {
+            TLorentzVector thisGamma(0,0,0,0);            
+            TLorentzVector thisEle(0,0,0,0);
+            thisGamma.SetPtEtaPhiM(gamma_pt[iGam],gamma_eta[iGam],gamma_phi[iGam],0);
+            thisEle.SetPtEtaPhiM(electron_pt[iEle],electron_eta[iEle],electron_phi[iEle],0);
+            invMass.push_back((thisGamma+thisEle).M());
+            eleIndex.push_back(iEle); 
+            gammaIndex.push_back(iGam);
+            if(thisGamma.Pt() > thisEle.Pt())
+            {
+                if(ptRatioFlip_)
+                    ptRatio.push_back(thisEle.Pt()/thisGamma.Pt());
+                else
+                    ptRatio.push_back(thisGamma.Pt()/thisEle.Pt());
+                ptRatioFlip_ = !ptRatioFlip_;
+            }
+            else
+            {
+                if(ptRatioFlip_)
+                    ptRatio.push_back(thisGamma.Pt()/thisEle.Pt());
+                else
+                    ptRatio.push_back(thisEle.Pt()/thisGamma.Pt());
+                ptRatioFlip_ = !ptRatioFlip_;
+            }
+        }
+    }
 
     //---fill output tree and reset
-    if (atLeastOneProbe && atLeastOneTag)
+    if(atLeastOneProbe && atLeastOneTag)
         outTree_->Fill();
 
     //---tag
@@ -610,7 +637,8 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     gamma_presel.clear();
     gamma_fullsel.clear();
     gamma_matchHLT.clear();
-    //---invariant mass
+    //---invariant mass and ptRatio
+    ptRatio.clear();
     invMass.clear();
     eleIndex.clear();
     gammaIndex.clear();
@@ -676,7 +704,8 @@ void TaPAnalyzer::bookOutputTree()
     outTree_->Branch("gamma_fullsel", "std::vector<int>", &gamma_fullsel);
     outTree_->Branch("gamma_matchHLT", "std::vector<bool>", &gamma_matchHLT);
 
-    outTree_->Branch("invMass","std::vector<Double_t>", &invMass);
+    outTree_->Branch("ptRatio","std::vector<float>", &ptRatio);
+    outTree_->Branch("invMass","std::vector<float>", &invMass);
     outTree_->Branch("eleIndex","std::vector<int>", &eleIndex);
     outTree_->Branch("gammaIndex","std::vector<int>", &gammaIndex);
 }
@@ -785,8 +814,8 @@ bool TaPAnalyzer::isTightEle(float scEta, float hoe, float dphi, float deta, flo
 
 
 
-void TaPAnalyzer::SetPuWeights(std::string puWeightFile) {
-
+void TaPAnalyzer::SetPuWeights(std::string puWeightFile)
+{
     if (puWeightFile == "") {
         std::cout << "you need a weights file to use this function" << std::endl;
         return;

@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 import FWCore.Utilities.FileUtils as FileUtils
 
-isMC = False
+isMC = True
 
 process = cms.Process("tnpAna")
 
@@ -29,11 +29,11 @@ process.source = cms.Source("PoolSource",
                             fileNames=cms.untracked.vstring([])
 )
 
-inputFileList = open("scripts/lists_Spring15v1/50ns/data/DoubleEG.list", "r")
+#inputFileList = open("scripts/lists_Spring15v1/50ns/data/DoubleEG.list", "r")
 #inputFileList = open("scripts/lists_Spring15v1/50ns/MC/DYLL.list", "r")
 
-for line in inputFileList:
-    process.source.fileNames.append(line);
+# for line in inputFileList:
+#    process.source.fileNames.append(line);
 
 process.load("flashgg/MicroAOD/flashggPhotons_cfi")
 process.load("flashgg/MicroAOD/flashggElectrons_cfi")
