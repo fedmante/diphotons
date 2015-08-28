@@ -1,0 +1,51 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Backup files
+*~
+*.orig
+*.REMOTE.*
+*.LOCAL.*
+*.BACKUP.*
+*.bak
+
+# python compiled
+*.pyc
+__init__.py
+
+*/test/*/
+*/test/*.root
+*/macros/*/
+*/config/*/
+*/TaPplots/*.png
+*/TaPplots/*.pdf
+*/TaPplots/*.eps
+*/TaPplots/*.root
+*/TaPplots/*.txt
+*.root
