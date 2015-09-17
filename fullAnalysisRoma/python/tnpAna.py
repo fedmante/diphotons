@@ -54,7 +54,7 @@ process.tnpAna = cms.EDAnalyzer('TaPAnalyzer',
 
                                 generatorInfo = cms.InputTag("generator"),
                                 dopureweight = cms.untracked.int32(0),
-                                sampleIndex  = cms.untracked.int32(0),   # 5
+                                sampleIndex  = cms.untracked.int32(5),   # 5
                                 puWFileName  = cms.string('xxx'),   # chiara  
                                 xsec         = cms.untracked.double(1.),
                                 kfac         = cms.untracked.double(1.),

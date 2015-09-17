@@ -393,7 +393,7 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
                 float elePt = Electron->pt();
                 if( (fabs(scEta)>1.442 && fabs(scEta)<1.566) || fabs(scEta)>2.5 )
                     continue;
-                if( elePt<20 )
+                if( elePt<5 )
                     continue;
 	
                 acceptEle.push_back(ElectronIndex);
@@ -494,7 +494,7 @@ void TaPAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
                 // acceptance
                 float gammaPt    = g1->et();
                 float gammaScEta = (g1->superCluster())->eta();
-                if (gammaPt<20)
+                if (gammaPt<5)
                     continue;
                 if (fabs(gammaScEta)>2.5)
                     continue;
@@ -777,8 +777,8 @@ bool TaPAnalyzer::isMediumEle(float scEta, float hoe, float dphi, float deta, fl
 }
 
 
-bool TaPAnalyzer::isTightEle(float scEta, float hoe, float dphi, float deta, float sIeIe, float ep, float d0, float dz, float reliso, int missHits, bool passConvVeto) {
- 
+bool TaPAnalyzer::isTightEle(float scEta, float hoe, float dphi, float deta, float sIeIe, float ep, float d0, float dz, float reliso, int missHits, bool passConvVeto)
+{ 
     bool okDeta, okDphi, okSieIe, okHoE, okEp, okD0, okDz, okIso, okMH, okConv;
                                                                                                                                       
     if (fabs(scEta)<1.5) {

@@ -273,7 +273,7 @@ int main(int argc, char* argv[])
             if(mc_M->at(iM) < 70 || mc_M->at(iM) > 110 ||
                !mc_e_medium->at(mc_e_idx->at(iM)) || !vars_mc[14]->at(mc_g_idx->at(iM)))
                 continue;
-            if(fabs(vars_mc[1]->at(mc_e_idx->at(iM))) > 1.5 && fabs(vars_mc[4]->at(mc_g_idx->at(iM)) > 1.5))
+            if(fabs(vars_mc[1]->at(mc_e_idx->at(iM))) > 1.5 && fabs(vars_mc[4]->at(mc_g_idx->at(iM))) > 1.5)
                 continue;
             if(mc_e_match->at(mc_e_idx->at(iM)) && mc_g_match->at(mc_g_idx->at(iM)))
             {
@@ -305,11 +305,11 @@ int main(int argc, char* argv[])
             if(data_M->at(iM) < 70 || data_M->at(iM) > 110 ||
                !data_e_medium->at(data_e_idx->at(iM)) || !vars_data[14]->at(data_g_idx->at(iM)))
                 continue;
-            if(fabs(vars_data[1]->at(data_e_idx->at(iM))) > 1.5 && fabs(vars_data[4]->at(data_g_idx->at(iM)) > 1.5))
+            if(fabs(vars_data[1]->at(data_e_idx->at(iM))) > 1.5 && fabs(vars_data[4]->at(data_g_idx->at(iM))) > 1.5)
                 continue;
             if(data_e_match->at(data_e_idx->at(iM)) && data_g_match->at(data_g_idx->at(iM)))
             {
-                if(fabs(vars_data[1]->at(data_e_idx->at(iM)))<1.5 && fabs(vars_data[4]->at(data_g_idx->at(iM)))<1.5)
+                if(fabs(vars_data[1]->at(data_e_idx->at(iM)))<1.5 && fabs(vars_data[4]->at(data_g_idx->at(iM))) < 1.5)
                     histos[0][NVARIABLES][1]->Fill(data_M->at(iM));
                 else
                     histos[1][NVARIABLES][1]->Fill(data_M->at(iM));
