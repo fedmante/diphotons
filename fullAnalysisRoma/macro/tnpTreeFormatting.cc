@@ -1,3 +1,8 @@
+// to compile and run:
+// root -l
+// .L tnpTreeFormatting.cc++
+// tnpTreeFormat(“filename”,lumiForW)
+
 #include <TFile.h>
 #include <TTree.h>
 #include <TBranch.h>
@@ -141,8 +146,8 @@ void tnpTreeFormat(const char* filename, float lumiForW) {
     for (unsigned int ii=0; ii<invMass->size(); ii++) {
       
       mass = (float)(invMass->at(ii));
-      // if (mass<60 || mass>120) continue;
-      if (mass<60 || mass>4000) continue;
+      if (mass<60 || mass>120) continue;
+      // if (mass<60 || mass>4000) continue;
       
       // further selection on tag 
       if (!isTagMediumEle->at(eleIndex->at(ii)))    continue;
